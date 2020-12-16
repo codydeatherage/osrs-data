@@ -1,9 +1,11 @@
 let fs = require('fs');
 const fetch = require('node-fetch');
 
-console.log('asdfew');
-
 getData = async() =>{
+    let weapData = {
+        'allWeapons' : []
+    }
+    console.log(weapData.allWeapons);
     let pageNumber = 1;
     /*   const eMax_Pages = 146; */
     let eMax_Pages = 74;
@@ -22,15 +24,20 @@ getData = async() =>{
                     || name.toLowerCase().includes('slayer helm') //exceptions are made for slayer helm and void equipment
                 ){
                     if(equipment.slot === 'weapon' || equipment.slot === '2h'){
-                        fs.appendFile('weapon_data.json', JSON.stringify(json._items[j]), function(e){
-                            if(e) throw e;
+                        if(!weapData.allWeapons.includes(json._items[j])){
+                            weapData.allWeapons.push(json._items[j])
+/*                             fs.appendFile('weapon_data.json', JSON.stringify(json._items[j]), function(e){
+                                if(e) throw e;
 
-                        });
+                            }); */
+                        }else{console.log('DUPLICATE')}
                     } 
                 }
             } 
         })
     }
+    fs.writeFile('weapon_data.json', JSON.stringify(weapData.allWeapons), (e) => {if(e) throw e });
+    console.log(weapData.allWeapons[7]);
     let b = new Date();
     console.log('DATA FETCH COMPLETE!');
     console.log('Time to Complete(ms)', b - a );
