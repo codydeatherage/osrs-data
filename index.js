@@ -2,10 +2,19 @@ let fs = require('fs');
 const fetch = require('node-fetch');
 
 getData = async() =>{
-    let weapData = {
-        'allWeapons' : []
+    let itemData = {
+        'weapon' : [],
+        'head' : [],
+        'cape': [],
+        'neck': [],
+        'ammo' : [],
+        'body':[],
+        'shield':[],
+        'legs': [],
+        'hands': [],
+        'feet': [],
+        'ring': []
     }
-    console.log(weapData.allWeapons);
     let pageNumber = 1;
     /*   const eMax_Pages = 146; */
     let eMax_Pages = 74;
@@ -24,24 +33,44 @@ getData = async() =>{
                     || name.toLowerCase().includes('slayer helm') //exceptions are made for slayer helm and void equipment
                 ){
                     if(equipment.slot === 'weapon' || equipment.slot === '2h'){
-                        if(!weapData.allWeapons.includes(json._items[j])){
-                            weapData.allWeapons.push(json._items[j])
-/*                             fs.appendFile('weapon_data.json', JSON.stringify(json._items[j]), function(e){
-                                if(e) throw e;
-
-                            }); */
-                        }else{console.log('DUPLICATE')}
+                        if(!itemData.weapon.includes(json._items[j])){
+                            itemData.weapon.push(json._items[j])
+                        }
+                    }
+                    else{
+                        if(!itemData[`${equipment.slot}`].includes(json._items[j])){
+                            itemData[`${equipment.slot}`].push(json._items[j]);
+                        }
                     } 
                 }
             } 
         })
     }
-    fs.writeFile('weapon_data.json', JSON.stringify(weapData.allWeapons), (e) => {if(e) throw e });
-    console.log(weapData.allWeapons[7]);
+    /* fs.writeFile('weapon_data.json', JSON.stringify(itemData.weapon), (e) => {if(e) throw e }); */
+    /* console.log(weapData.allWeapons[7]); */
+    for(let key in itemData){
+        fs.writeFile(`${key}_data.json`, JSON.stringify(itemData[`${key}`]), (e) => {if(e) throw e });
+    }
     let b = new Date();
     console.log('DATA FETCH COMPLETE!');
     console.log('Time to Complete(ms)', b - a );
 }
 
 getData();
-
+/* let itemData = {
+    'weapon' : [],
+    'head' : [],
+    'cape': [],
+    'neck': [],
+    'ammo' : [],
+    'body':[],
+    'shield':[],
+    'legs': [],
+    'hands': [],
+    'feet': [],
+    'ring': []
+}
+for(let key in itemData){
+    console.log(key);
+}
+ */
