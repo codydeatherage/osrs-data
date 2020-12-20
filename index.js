@@ -57,20 +57,3 @@ getData = async() =>{
 }
 
 getData();
-/* let itemData = {
-    'weapon' : [],
-    'head' : [],
-    'cape': [],
-    'neck': [],
-    'ammo' : [],
-    'body':[],
-    'shield':[],
-    'legs': [],
-    'hands': [],
-    'feet': [],
-    'ring': []
-}
-for(let key in itemData){
-    console.log(key);
-}
- */
