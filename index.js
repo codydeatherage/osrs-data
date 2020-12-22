@@ -1,6 +1,32 @@
 let fs = require('fs');
 const fetch = require('node-fetch');
 
+
+getBossData = async () => {
+    let pageNumber = 1;
+    let eMax_Pages = 57;
+    let bossData = [];
+    let a = new Date();
+    console.log('Beginning fetch....');
+    for(let i = pageNumber; i <= eMax_Pages; i++){
+    await fetch(`https://api.osrsbox.com/monsters?max_results=50&&page=${i}`)
+        .then(response => response.json())
+        .then(json => {
+            for (let j = 0; j < json._items.length; j++) {
+                const {category, name, id} = json._items[j];
+                if(!bossData.includes(json._items[j])){
+                    if(category.includes('boss')){
+                        bossData.push(json._items[j]);
+                    }
+                }
+            }
+        })
+    }
+    for(let boss of bossData){
+        fs.writeFile(`boss_data.json`, JSON.stringify(bossData), (e) => {if(e) throw e });
+    }
+}
+
 getData = async() =>{
     let itemData = {
         'weapon' : [],
@@ -56,4 +82,5 @@ getData = async() =>{
     console.log('Time to Complete(ms)', b - a );
 }
 
-getData();
+//getData();
+getBossData();
