@@ -82,5 +82,21 @@ getData = async() =>{
     console.log('Time to Complete(ms)', b - a );
 }
 
+getBookData = () => {
+    const myKey= 'AIzaSyCoTjWx6oEMlNzakkbhWJou6y2zqgyXt7U';
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=flowers for algernon+inauthor:keyes&key=${myKey}&langRestrict=en`)
+        .then(response => response.json())
+        .then( json => {
+            console.log(json);
+            fetch(json.items[0].selfLink)
+            .then(response => response.json())
+            .then(json => {
+                console.log(json);
+                console.log(json.volumeInfo.description);
+            })
+        })
+}
+
+getBookData();
 //getData();
-getBossData();
+//getBossData();
